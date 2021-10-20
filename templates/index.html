@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href=" {{ url_for('static', filename='logopngwhite.png') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords"
+        content="Nawaf, Nawaf alqari, nawaf.dev, nawaf.cf, nawafcf, nawaf cf, todo, todo list, todo app, todo_list, todo_app">
+    <meta name="description" content="To Do List - Made by Nawaf">
+    <meta name="author" content="TODON">
+    <meta name="theme-color" content="#007bff">
+    <script src="{{ url_for('static', filename='all.min.js') }}"></script>
+    <!-- <script src="../static/all.min.js"></script> -->
+    <title>To Do List - Made By Nawaf</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: rgb(0, 0, 34);
+            color: white;
+        }
+
+        .title {
+            margin: 30px 0 10px;
+        }
+
+        .footer {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .taskInp,
+        .taskInp:focus,
+        .submit {
+            border-radius: 0;
+            outline: 3px solid #007bff;
+        }
+
+        div.task {
+            background-color: white;
+            color: black;
+            border: solid 4px #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+
+        div.task h6 {
+            margin: 0;
+        }
+
+        div.task .tools .delete,
+        div.task .tools .edit {
+            color: white;
+        }
+
+        div.task .tools i {
+            font-size: 10px;
+        }
+
+        .done {
+            text-decoration: line-through;
+            color: #28a745;
+        }
+
+        div.task .tools a:hover {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="input-container container">
+        <h3 class="title">To Do List - Made By Nawaf</h3>
+        <form action="/" method="POST" id="todo-form">
+            <div class="d-table-cell w-100">
+                <input type="text" id="task" class="taskInp form-control" name="task" placeholder="Task" autofocus
+                    maxlength="50" required>
+            </div>
+            <div class="d-table-cell align-middle">
+                
+                <input type="submit" class="submit btn btn-primary" value="Add">
+            </div>
+        </form>
+        <div class="footer">
+            Made by <a href="https://nawaf.cf" target="_blank">Nawaf Alqari</a> © 2021
+        </div>
+        {% for title, task in tasks.items() %}
+        {% if not (title.split('--=||=--')[1]) %}
+        <div class="task">
+            <h6 class="{% if task.split('--=||=--')[1] == 'True' %}done{% endif %}">{{ task.split('--=||=--')[0] }}</h6>
+            <div class="tools">
+                {% if task.split('--=||=--')[1] == 'False' %}
+                <a href="{{ url_for('complete_task', task=task.split('--=||=--')[0], title=title) }}">
+                    <div class="edit btn btn-success">
+                        <i class="fa fa-check"></i>
+                    </div>
+                </a>
+                {% else %}
+                <a href="{{ url_for('uncomplete_task', task=task.split('--=||=--')[0], title=title) }}">
+                    <div class="edit btn btn-warning">
+                        <i class="fa fa-times"></i>
+                    </div>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('remove_task', task=task.split('--=||=--')[0], title=title) }}">
+                    <div class="delete btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% if tasks %}
+        <a href="{{ url_for('remove_all_tasks') }}" class="btn btn-danger">Remove All</a>
+        <a href="{{ url_for('remove_all_completed') }}" class="btn btn-danger">Remove All Completed</a>
+        {% endif %}
+    </div>
+    <script>
+        
+    </script>
+</body>
+
+</html>
